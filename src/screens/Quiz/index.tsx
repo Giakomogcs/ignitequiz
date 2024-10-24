@@ -13,6 +13,7 @@ import { Question } from "../../components/Question";
 import { QuizHeader } from "../../components/QuizHeader";
 import { ConfirmButton } from "../../components/ConfirmButton";
 import { OutlineButton } from "../../components/OutlineButton";
+import { Overlayfeedback } from "../../components/Overlayfeedback";
 import Animated, {
   Easing,
   event,
@@ -42,6 +43,7 @@ const CARD_SKIP_AREA = -200;
 export function Quiz() {
   const [points, setPoints] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [statusReply, SetStatusReply] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [quiz, setQuiz] = useState<QuizProps>({} as QuizProps);
   const [alternativeSelected, setAlternativeSelected] = useState<null | number>(
@@ -93,9 +95,11 @@ export function Quiz() {
     }
 
     if (quiz.questions[currentQuestion].correct === alternativeSelected) {
+      SetStatusReply(1);
       setPoints((prevState) => prevState + 1);
     } else {
       shakeAnimation();
+      SetStatusReply(2);
     }
 
     setAlternativeSelected(null);
@@ -218,6 +222,7 @@ export function Quiz() {
 
   return (
     <View style={styles.container}>
+      <Overlayfeedback status={statusReply} />
       <Animated.View style={fixedProgressBarStyles}>
         <Text style={styles.title}>{quiz.title}</Text>
 
